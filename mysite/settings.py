@@ -26,7 +26,7 @@ SECRET_KEY = '19%yhs0ab-*+*o#jpvz(k-d@ugo)y%@j7k$e^3pme=zn8rrqg%'
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    'https://intense-earth-51031.herokuapp.com/',
+    'intense-earth-51031.herokuapp.com',
 ]
 
 
