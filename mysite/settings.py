@@ -25,7 +25,9 @@ SECRET_KEY = '19%yhs0ab-*+*o#jpvz(k-d@ugo)y%@j7k$e^3pme=zn8rrqg%'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'https://intense-earth-51031.herokuapp.com/',
+]
 
 
 # Application definition
