@@ -27,9 +27,6 @@ def signup(request):
 
 
 @login_required
-def secret_page(request):
-    return render(request, 'secret_page.html')
+def edit(request):
+    return render(request, 'edit.html')
 
-
-class SecretPage(LoginRequiredMixin, TemplateView):
-    template_name = 'secret_page.html'
