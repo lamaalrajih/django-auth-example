@@ -21,8 +21,7 @@ from mysite.core import views
 urlpatterns = [
     path('', views.home, name='home'),
     path('signup/', views.signup, name='signup'),
-    path('secret2/', views.SecretPage.as_view(), name='secret2'),
-    path('secret', views.secret_page, name='secret'),
+    path('edit', views.edit, name='edit'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('admin/', admin.site.urls),
 ]
