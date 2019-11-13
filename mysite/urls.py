@@ -19,7 +19,7 @@ from django.urls import include, path
 from graphene_django.views import GraphQLView
 
 from mysite.core import views
-from mysite.schema.schema import schema
+from mysite import schema
 
 urlpatterns = [
     path('', views.home, name='home'),

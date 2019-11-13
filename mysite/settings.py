@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'intense-earth-51031.herokuapp.com',
+    'localhost',
 ]
 
 
