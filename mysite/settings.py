@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mysite.core',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -73,6 +74,12 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
+
+
+# Graphene schema definition
+GRAPHENE = {
+    'SCHEMA': 'mysite.core.schema',
+}
 
 
 # Database

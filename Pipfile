@@ -9,6 +9,7 @@ verify_ssl = true
 django = "*"
 gunicorn = "*"
 psycopg2 = "*"
+graphene-django = "*"
 
 [requires]
 python_version = "3.7"

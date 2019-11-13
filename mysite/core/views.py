@@ -3,7 +3,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
-from django.views.generic import TemplateView
 
 
 def home(request):
@@ -24,7 +23,6 @@ def signup(request):
     return render(request, 'registration/signup.html', {
         'form': form,
     })
-
 
 @login_required
 def edit(request):
