@@ -1,10 +1,9 @@
 from django.db import models
 
-from django.db import models
 
 class User(models.Model):
     """The custom User model used for authentication and storing user data."""
-    
+
     user_id = models.IntegerField(primary_key=True)
     can_edit = models.BooleanField()
 
@@ -14,6 +13,7 @@ class User(models.Model):
             'User(user_id={user_id})'
             .format(**self.__dict__)
         )
+
 
 class Map(models.Model):
     """The custom Map model."""
