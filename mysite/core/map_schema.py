@@ -142,4 +142,97 @@ class Query(graphene.ObjectType):
         return None
 
 
-schema = graphene.Schema(query=Query)
+# --------------- Mutations ---------------
+class MapClass(graphene.ObjectType):
+    id = graphene.Int()
+    title = graphene.String()
+
+
+class LayerClass(graphene.ObjectType):
+    id = graphene.Int()
+    title = graphene.String()
+    color = graphene.String()
+
+
+class DataPointClass(graphene.ObjectType):
+    id = graphene.Int()
+    title = graphene.String()
+    size = graphene.Int()
+    latitude = graphene.String()
+    longitude = graphene.String()
+
+
+class EditMap(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+        title = graphene.String(required=True)
+
+    map = graphene.Field(MapClass)
+
+    @staticmethod
+    def mutate(root, info, id, title):
+        map = Map.objects.get(pk=id)
+        map.title = title
+
+        map.save()
+
+        return EditMap(map=map)
+
+
+class EditLayer(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+        title = graphene.String(required=True)
+        color = graphene.String()
+
+    layer = graphene.Field(LayerClass)
+
+    @staticmethod
+    def mutate(root, info, id, title, color=None):
+        layer = Layer.objects.get(pk=id)
+        layer.title = title
+
+        if color:
+            layer.color = color
+
+        layer.save()
+
+        return EditLayer(layer=layer)
+
+
+class EditDataPoint(graphene.Mutation):
+    class Arguments:
+        id = graphene.Int(required=True)
+        title = graphene.String(required=True)
+        size = graphene.Int()
+        latitude = graphene.String()
+        longitude = graphene.String()
+
+    data_point = graphene.Field(DataPointClass)
+
+    @staticmethod
+    def mutate(root, info, id, title, size=None, latitude=None, longitude=None):  # noqa: E501
+        data_point = DataPointType.objects.get(pk=id)
+        data_point.title = title
+
+        if size:
+            data_point.size = size
+
+        if latitude:
+            data_point.latitude = latitude
+
+        if longitude:
+            data_point.longitude = longitude
+
+        data_point.save()
+
+        return EditLayer(data_point=data_point)
+
+
+class Mutation(graphene.ObjectType):
+    edit_map = EditMap.Field()
+    edit_layer = EditLayer.Field()
+    edit_data_point = EditDataPoint.Field()
+
+
+schema = graphene.Schema(query=Query, mutation=Mutation)
