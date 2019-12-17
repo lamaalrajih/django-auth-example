@@ -143,36 +143,72 @@ class Query(graphene.ObjectType):
 
 
 # --------------- Mutations ---------------
-class MapClass(graphene.ObjectType):
-    id = graphene.Int()
-    title = graphene.String()
+class AddMap(graphene.Mutation):
+    class Arguments:
+        title = graphene.String(required=True)
+
+    map = graphene.Field(MapType)
+
+    def mutate(root, info, title):
+        map = Map.objects.create(title=title)
+
+        return AddMap(map=map)
 
 
-class LayerClass(graphene.ObjectType):
-    id = graphene.Int()
-    title = graphene.String()
-    color = graphene.String()
+class AddLayer(graphene.Mutation):
+    class Arguments:
+        title = graphene.String(required=True)
+        color = graphene.String()
+
+    layer = graphene.Field(LayerType)
+
+    def mutate(root, info, title, color=None):
+        if not color:
+            color = "blue"
+
+        layer = Layer.objects.create(
+            title=title,
+            color=color
+        )
+
+        return AddLayer(layer=layer)
 
 
-class DataPointClass(graphene.ObjectType):
-    id = graphene.Int()
-    title = graphene.String()
-    size = graphene.Int()
-    latitude = graphene.String()
-    longitude = graphene.String()
+class AddDataPoint(graphene.Mutation):
+    class Arguments:
+        title = graphene.String(required=True)
+        size = graphene.Int()
+        latitude = graphene.String(required=True)
+        longitude = graphene.String(required=True)
+
+    data_point = graphene.Field(DataPointType)
+
+    def mutate(root, info, title, latitude, longitude, size=None):  # noqa: E501
+        if not size:
+            size = 1
+
+        data_point = DataPoint.objects.create(
+            title=title,
+            size=size,
+            latitude=latitude,
+            longitude=longitude,
+        )
+
+        return AddDataPoint(data_point=data_point)
 
 
 class EditMap(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
-        title = graphene.String(required=True)
+        title = graphene.String()
 
-    map = graphene.Field(MapClass)
+    map = graphene.Field(MapType)
 
-    @staticmethod
-    def mutate(root, info, id, title):
+    def mutate(root, info, id, title=None):
         map = Map.objects.get(pk=id)
-        map.title = title
+
+        if title:
+            map.title = title
 
         map.save()
 
@@ -182,15 +218,16 @@ class EditMap(graphene.Mutation):
 class EditLayer(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
-        title = graphene.String(required=True)
+        title = graphene.String()
         color = graphene.String()
 
-    layer = graphene.Field(LayerClass)
+    layer = graphene.Field(LayerType)
 
-    @staticmethod
-    def mutate(root, info, id, title, color=None):
+    def mutate(root, info, id, title=None, color=None):
         layer = Layer.objects.get(pk=id)
-        layer.title = title
+
+        if title:
+            layer.title = title
 
         if color:
             layer.color = color
@@ -203,17 +240,18 @@ class EditLayer(graphene.Mutation):
 class EditDataPoint(graphene.Mutation):
     class Arguments:
         id = graphene.Int(required=True)
-        title = graphene.String(required=True)
+        title = graphene.String()
         size = graphene.Int()
         latitude = graphene.String()
         longitude = graphene.String()
 
-    data_point = graphene.Field(DataPointClass)
+    data_point = graphene.Field(DataPointType)
 
-    @staticmethod
-    def mutate(root, info, id, title, size=None, latitude=None, longitude=None):  # noqa: E501
-        data_point = DataPointType.objects.get(pk=id)
-        data_point.title = title
+    def mutate(root, info, id, title=None, size=None, latitude=None, longitude=None):  # noqa: E501
+        data_point = DataPoint.objects.get(pk=id)
+
+        if title:
+            data_point.title = title
 
         if size:
             data_point.size = size
@@ -226,10 +264,13 @@ class EditDataPoint(graphene.Mutation):
 
         data_point.save()
 
-        return EditLayer(data_point=data_point)
+        return EditDataPoint(data_point=data_point)
 
 
 class Mutation(graphene.ObjectType):
+    add_map = AddMap.Field()
+    add_layer = AddLayer.Field()
+    add_data_point = AddDataPoint.Field()
     edit_map = EditMap.Field()
     edit_layer = EditLayer.Field()
     edit_data_point = EditDataPoint.Field()
